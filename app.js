@@ -13,7 +13,7 @@ mongoose.connect(db, { useNewUrlParser: true })
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-app.get('/', (req, res) => res.send('Whattttup')) // Set up GET route 
+app.get('/', (req, res) => res.send('Whats guccccccii')) // Set up GET route 
 app.listen(port, () => console.log(`Server is running on port ${port}`))
 app.use('/api/users', users)
 app.use('/api/tweets', tweets)

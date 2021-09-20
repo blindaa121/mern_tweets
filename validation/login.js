@@ -1,0 +1,15 @@
+const Validator = require('validator')
+const validText = require('./valid-text')
+
+module.exports = function validateLoginInput(data) {
+  let errors = {}
+  const { isEmail, isEmpty } = Validator
+  data.email = validText(data.email) ? data.email : ''
+  data.password = validText(data.password) ? data.password : ''
+
+  if (!isEmail(data.email)) errors.email = 'Email is invalid'
+  if (isEmpty(data.email)) errors.email = 'Email field is required'
+  if (isEmpty(data.password)) errors.password = 'Password field is required'
+
+  return { errors, isValid: !Object.keys(errors).length }
+}
