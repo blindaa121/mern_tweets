@@ -8,13 +8,15 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys')
 const passport = require('passport')
 // routes
+// Get current user info
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
-  res.json({ id: req.user.id, username: req.user.username, email: req.user.email });
+  const { id, username, email, firstName, lastName, bio } = req.user
+  res.json({ id, username, email, firstName, lastName, bio });
 })
 // register
 router.post('/register', (req, res) => {
   // Check if the email has already been registered 
-  const { email, username, password } = req.body
+  const { email, username, password, firstName, lastName, bio } = req.body
   const { errors, isValid } = validateRegisterInput(req.body)
 
   if (!isValid) return res.status(400).json(errors)
@@ -23,7 +25,7 @@ router.post('/register', (req, res) => {
     .then(user => {
       // Try to find a user that is registered with the same username, if the user's email exists in the database then we send an error 
       if (user) return res.status(400).json({ username: 'A user has already registered with this username' })
-      const newUser = new User({ username, email, password })
+      const newUser = new User({ username, email, password, firstName, lastName, bio })
       // User bcrypt to hash the users password from the req.body, this is done so we do not store the password into the database 
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
